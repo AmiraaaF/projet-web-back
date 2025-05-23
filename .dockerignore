@@ -1,0 +1,7 @@
+cat > .dockerignore << 'EOF'
+.git
+.github
+.vscode
+*.md
+*.sqlite
+EOF
