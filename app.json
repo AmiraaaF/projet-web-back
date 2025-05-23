@@ -1,0 +1,10 @@
+{
+    "name": "projet-web-back",
+    "description": "Backend Deno pour Parkly",
+    "buildpacks": [
+      {
+        "url": "https://github.com/chibat/heroku-buildpack-deno.git"
+      }
+    ]
+  }
+  
