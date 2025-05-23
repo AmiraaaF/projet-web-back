@@ -32,7 +32,3 @@ export async function register(username: string, password: string) {
   const token = await create({ alg: "HS512", typ: "JWT" }, { userName:username, role: "user"  }, secretKey);
   return { token, username, role: "user" };
 }
-export function getProfile(username: string) {
-  const user = getUserByUsername(username);
-  return user ? { username: user.username, id: user.id } : null;
-}

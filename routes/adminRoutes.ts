@@ -1,6 +1,8 @@
 import { adminMiddleware } from "../middlewares/adminMiddleware.ts";
 import { Router } from "https://deno.land/x/oak/mod.ts";
 import db from "../models/db.ts";
+
+
 const adminRouter = new Router();
 // Supprimer un post (admin only)
 adminRouter.delete("/admin/posts/:id", adminMiddleware, (ctx) => {
@@ -45,6 +47,18 @@ adminRouter.post("/admin/rooms", adminMiddleware, async (ctx) => {
     ctx.response.status = 500;
     ctx.response.body = { error: "Erreur lors de la création du salon" };
   }
+});
+
+// Supprimer un salon (admin only)
+adminRouter.delete("/admin/rooms/:id", adminMiddleware, (ctx) => {
+  const roomId = Number(ctx.params.id);
+  if (isNaN(roomId)) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "ID invalide" };
+    return;
+  }
+  db.query("DELETE FROM chat_rooms WHERE id = ?", [roomId]);
+  ctx.response.status = 204;
 });
 
 export default adminRouter;

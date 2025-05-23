@@ -6,8 +6,18 @@ export const getPosts = (ctx: RouterContext<any, any, any>) => {
   
   try {
     const postsResult = db.query(
-      "SELECT p.id, p.title, p.content, p.created_at, p.updated_at, u.username as author_username FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC"
+      "SELECT p.id, p.title, p.content, p.created_at, p.updated_at, u.username as author_username, u.role as author_role FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC"
     );
+    
+    // Récupérer le rôle de l'utilisateur actuel s'il est connecté
+    let currentUserRole = null;
+    if (ctx.state.tokenData) {
+      const userResult = db.query("SELECT role FROM users WHERE id = ?", [ctx.state.tokenData.id]);
+      if (userResult.length > 0) {
+        currentUserRole = userResult[0][0];
+      }
+    }
+
     // Transformer les résultats de la requête en un format plus utilisable
     const posts = postsResult.map((row: any) => {
       return {
@@ -16,7 +26,9 @@ export const getPosts = (ctx: RouterContext<any, any, any>) => {
         content: row[2],
         created_at: row[3],
         updated_at: row[4],
-        author_username: row[5]
+        author_username: row[5],
+        author_role: row[6],
+        current_user_role: currentUserRole
       };
     });
     ctx.response.body = posts;

@@ -69,11 +69,13 @@ db.query(`
     CHECK ((post_id IS NOT NULL AND parking_id IS NULL) OR (post_id IS NULL AND parking_id IS NOT NULL))
 );
 `);
-db.query(`CREATE TABLE IF NOT EXISTS chat_rooms (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT UNIQUE NOT NULL
-);
+db.query(`
+  CREATE TABLE IF NOT EXISTS chat_rooms (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+  );
 `);
+
 
 // Création du dossier uploads
 const uploadDir = "uploads";

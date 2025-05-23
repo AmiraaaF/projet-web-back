@@ -1,5 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { login, register, getProfile } from "../controllers/authController.ts";
+import { login, register } from "../controllers/authController.ts";
 import { authorizationMiddleware } from "../middlewares/authMiddleware.ts";
 
 const router = new Router();
@@ -42,28 +42,6 @@ router.post("/register", async (ctx) => {
   });
   ctx.response.status = 201;
   ctx.response.body = { message: "User successfully registered" };
-});
-
-router.get("/verify_cookie", authorizationMiddleware, (ctx) => {
-  const user = getProfile(ctx.state.tokenData.userName);
-  if (user) {
-    ctx.response.status = 200;
-    ctx.response.body = user;
-  } else {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "TODO" };
-  }
-});
-
-router.get("/profile", authorizationMiddleware, (ctx) => {
-  const user = getProfile(ctx.state.tokenData.userName);
-  if (user) {
-    ctx.response.status = 200;
-    ctx.response.body = user;
-  } else {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "User not found" };
-  }
 });
 
 // Route de déconnexion
