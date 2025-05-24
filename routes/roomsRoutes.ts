@@ -25,10 +25,11 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
     ctx.response.status = 201;
     ctx.response.body = { message: "Salon créé avec succès" };
   } catch (err) {
-    console.error("Erreur création salon :", err);
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Erreur lors de la création du salon" };
-  }
+      console.error("Erreur création salon :", err);
+      ctx.response.status = 500;
+      ctx.response.body = { error: err.message, stack: err.stack };
+}
+
 });
 
 
