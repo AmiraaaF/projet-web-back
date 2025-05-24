@@ -1,5 +1,6 @@
 # 1. Utiliser l'image officielle Deno
-FROM denoland/deno:1.37.0
+FROM denoland/deno:1.46.0
+
 
 # 2. Définir le dossier de travail
 WORKDIR /app
