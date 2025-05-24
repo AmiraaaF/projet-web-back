@@ -8,7 +8,7 @@ import messagesRoutes from "./routes/messagesRoutes.ts";
 import adminRoutes from "./routes/adminRoutes.ts";
 import { jwtDecodeMiddleware } from "./middlewares/jwtDecodeMiddleware.ts";
 import { getProfile } from "./controllers/profileController.ts";
-import roomsRouter from "./routes/roomsRoutes.ts";
+import  roomsRouter  from "./routes/roomsRoutes.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
 
 // Au début de app.ts, après les imports

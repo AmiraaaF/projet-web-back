@@ -23,3 +23,6 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
     ctx.response.body = { error: "Erreur lors de la création du salon" };
   }
 });
+
+
+export default roomsRouter;
