@@ -15,7 +15,6 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
       return;
     }
 
-const value = await body.value;
 
     const value = await body.value;
 
