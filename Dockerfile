@@ -12,7 +12,9 @@ COPY app.ts ./
 # COPY deps.ts ./  # décommente si tu as un fichier deps.ts
 
 # 5. Mettre en cache les dépendances sans accès réseau (cache-only)
-RUN deno cache --lock=deno.lock --cached-only app.ts
+RUN deno cache --lock=deno.lock app.ts
+
+
 
 # 6. Copier tout le reste des fichiers de l'app
 COPY . .
