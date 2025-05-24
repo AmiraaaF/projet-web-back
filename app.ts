@@ -17,7 +17,7 @@ const app = new Application();
 
 // Configuration CORS
 app.use(oakCors({ 
-  origin: `http://mon-front.cluster-ig3.igpolytech.fr`,
+  origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
 }));
 app.use(jwtDecodeMiddleware);
