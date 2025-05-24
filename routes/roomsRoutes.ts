@@ -5,13 +5,11 @@ import db from "../models/db.ts";
 const roomsRouter = new Router();
 roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
   try {
-    const body = ctx.request.body;
+   
     
-    if (body.type !== "json") {
-      ctx.response.status = 400;
-      ctx.response.body = { error: "Type de contenu non supporté" };
-      return;
-    }
+    const body = ctx.request.body({ type: "json" });
+
+
 
     const value = await body.value;
 
