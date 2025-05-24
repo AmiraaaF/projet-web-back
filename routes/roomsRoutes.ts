@@ -1,6 +1,6 @@
 import { Router } from "http://deno.land/x/oak@v17.1.4/mod.ts";
 import { authorizationMiddleware } from "../middlewares/authMiddleware.ts";
-// import db from "../models/db.ts";
+import db from "../models/db.ts";
 
 const roomsRouter = new Router();
 roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
