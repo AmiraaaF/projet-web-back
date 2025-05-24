@@ -1,6 +1,6 @@
 import { DB } from "http://deno.land/x/sqlite/mod.ts";
 
-export const db = new DB("database.sqlite");
+const db = new DB("database.sqlite");
 
 // Création des tables
 db.query(`
@@ -88,4 +88,4 @@ try {
   }
 }
 
-// export default db;
+export default db;
