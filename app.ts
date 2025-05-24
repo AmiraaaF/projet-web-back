@@ -1,5 +1,5 @@
-import { Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts";
+import { Application } from "http://deno.land/x/oak@v17.1.4/mod.ts";
+import { oakCors } from "http://deno.land/x/cors/mod.ts";
 import authRoutes from "./routes/authRoutes.ts";
 import parkingRoutes from "./routes/parkingRoutes.ts";
 import websocketRoutes from "./routes/websocketRoutes.ts";
@@ -21,7 +21,7 @@ const app = new Application();
 
 // Configuration CORS
 app.use(oakCors({ 
-  origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
+  origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
 } ));
 
@@ -52,7 +52,7 @@ app.use(roomsRouter.allowedMethods());
 
 app.use(getProfile);
 
-console.log(`Serveur démarré sur https://localhost:${PORT}`);
+console.log(`Serveur démarré sur http://localhost:${PORT}`);
 // Route pour la racine
 app.use((ctx) => {
   if (ctx.request.url.pathname === "/") {

@@ -1,5 +1,5 @@
 import { adminMiddleware } from "../middlewares/adminMiddleware.ts";
-import { Router } from "https://deno.land/x/oak/mod.ts";
+import { Router } from "http://deno.land/x/oak/mod.ts";
 import db from "../models/db.ts";
 
 

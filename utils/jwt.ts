@@ -1,4 +1,4 @@
-import { create, verify } from "https://deno.land/x/djwt/mod.ts";
+import { create, verify } from "http://deno.land/x/djwt/mod.ts";
 export const secretKey = await crypto.subtle.importKey(
   "raw",
   new TextEncoder().encode("votre-cle-secrete-ultra-securisee"),

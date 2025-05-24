@@ -1,7 +1,7 @@
 // middleware qui décode le token JWT (
 // auth_token) pour toutes les requêtes, même celles qui ne sont pas protégées.
 
-import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { verify } from "http://deno.land/x/djwt/mod.ts";
 import { secretKey } from "../utils/jwt.ts";
 
 export async function jwtDecodeMiddleware(ctx, next) {

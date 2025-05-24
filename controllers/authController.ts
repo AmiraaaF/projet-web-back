@@ -1,5 +1,5 @@
-import { create, verify } from "https://deno.land/x/djwt/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
+import { create, verify } from "http://deno.land/x/djwt/mod.ts";
+import * as bcrypt from "http://deno.land/x/bcrypt/mod.ts";
 import { getUserByUsername, getHash, createUser } from "../models/userModel.ts";
 import { secretKey } from "../utils/jwt.ts";
 

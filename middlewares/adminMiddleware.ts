@@ -1,5 +1,5 @@
-import { Context } from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { Context } from "http://deno.land/x/oak@v17.1.4/mod.ts";
+import { verify } from "http://deno.land/x/djwt/mod.ts";
 import { getUserByUsername } from "../models/userModel.ts"; 
 import { secretKey } from "../utils/jwt.ts";
 

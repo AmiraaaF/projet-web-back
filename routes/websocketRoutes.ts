@@ -1,5 +1,5 @@
-import { Router } from "https://deno.land/x/oak/mod.ts";
-import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { Router } from "http://deno.land/x/oak/mod.ts";
+import { verify } from "http://deno.land/x/djwt/mod.ts";
 import { secretKey } from "../utils/jwt.ts";
 import { saveMessage, formatChatMessage } from "../controllers/chatController.ts";
 

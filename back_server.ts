@@ -1,8 +1,8 @@
-import { Application, Context, Router } from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { create, verify } from "https://deno.land/x/djwt/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
-import { DB } from "https://deno.land/x/sqlite/mod.ts";
+import { Application, Context, Router } from "http://deno.land/x/oak@v17.1.4/mod.ts";
+import { oakCors } from "http://deno.land/x/cors/mod.ts";
+import { create, verify } from "http://deno.land/x/djwt/mod.ts";
+import * as bcrypt from "http://deno.land/x/bcrypt/mod.ts";
+import { DB } from "http://deno.land/x/sqlite/mod.ts";
 
 const PORT = 3002;
 const CORS_IP = Deno.args.length >= 1 ? Deno.args[0] : "localhost";
@@ -406,7 +406,7 @@ router.get("/api/osm-parkings", async (ctx) => {
   `;
 
   try {
-    const overpassResponse = await fetch("https://overpass-api.de/api/interpreter", {
+    const overpassResponse = await fetch("http://overpass-api.de/api/interpreter", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `data=${encodeURIComponent(query)}`,
@@ -436,7 +436,7 @@ router.get("/api/osm-parkings", async (ctx) => {
 
 
 app.use(oakCors({ 
-  origin: `https://localhost:8060`,
+  origin: `http://localhost:8060`,
   credentials: true,
   
  }));
@@ -446,5 +446,5 @@ app.use(oakCors({
 app.use(router.routes());
 app.use(router.allowedMethods()),
 
-console.log(`Serveur démarré sur https://localhost:${PORT}`);
+console.log(`Serveur démarré sur http://localhost:${PORT}`);
 await app.listen({ port: PORT });

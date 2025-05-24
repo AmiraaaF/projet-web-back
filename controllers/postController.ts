@@ -1,4 +1,4 @@
-import { RouterContext } from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import { RouterContext } from "http://deno.land/x/oak@v17.1.4/mod.ts";
 import { db } from "../models/db.ts";
 
 // Récupérer tous les posts

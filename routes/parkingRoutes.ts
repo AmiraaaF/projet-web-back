@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import { Router } from "http://deno.land/x/oak@v17.1.4/mod.ts";
 import { getParkings, createParking } from "../controllers/parkingController.ts";
 import { authorizationMiddleware } from "../middlewares/authMiddleware.ts";
 

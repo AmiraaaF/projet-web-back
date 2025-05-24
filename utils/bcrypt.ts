@@ -1,4 +1,4 @@
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
+import * as bcrypt from "http://deno.land/x/bcrypt/mod.ts";
 export async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password);
 }
