@@ -6,7 +6,7 @@ WORKDIR /app
 COPY deno.lock ./
 COPY app.ts ./
 
-RUN deno cache --allow-import --lock=deno.lock app.ts
+RUN deno cache --lock=deno.lock app.ts
 
 # Copier le reste des fichiers
 COPY . .
