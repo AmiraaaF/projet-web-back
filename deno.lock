@@ -55,6 +55,12 @@
     }
   },
   "redirects": {
+    "http://deno.land/x/bcrypt/mod.ts": "https://deno.land/x/bcrypt/mod.ts",
+    "http://deno.land/x/cors/mod.ts": "https://deno.land/x/cors/mod.ts",
+    "http://deno.land/x/djwt/mod.ts": "https://deno.land/x/djwt/mod.ts",
+    "http://deno.land/x/oak/mod.ts": "https://deno.land/x/oak/mod.ts",
+    "http://deno.land/x/oak@v17.1.4/mod.ts": "https://deno.land/x/oak@v17.1.4/mod.ts",
+    "http://deno.land/x/sqlite/mod.ts": "https://deno.land/x/sqlite/mod.ts",
     "https://deno.land/x/bcrypt/mod.ts": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "https://deno.land/x/cors/mod.ts": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "https://deno.land/x/djwt/mod.ts": "https://deno.land/x/djwt@v3.0.2/mod.ts",
