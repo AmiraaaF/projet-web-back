@@ -7,9 +7,15 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
   try {
    
     
-    const body = ctx.request.body({ type: "json" });
+    const body = ctx.request.body;
+    
+    if (body.type !== "json") {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Type de contenu non supporté" };
+      return;
+    }
 
-
+const value = await body.value;
 
     const value = await body.value;
 
