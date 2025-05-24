@@ -21,7 +21,7 @@ const app = new Application();
 
 // Configuration CORS
 app.use(oakCors({ 
-  origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
+  origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
 } ));
 
@@ -52,7 +52,7 @@ app.use(roomsRouter.allowedMethods());
 
 app.use(getProfile);
 
-console.log(`Serveur démarré sur http://localhost:${PORT}`);
+console.log(`Serveur démarré sur https://localhost:${PORT}`);
 // Route pour la racine
 app.use((ctx) => {
   if (ctx.request.url.pathname === "/") {
