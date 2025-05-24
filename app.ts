@@ -9,7 +9,8 @@ import adminRoutes from "./routes/adminRoutes.ts";
 import { jwtDecodeMiddleware } from "./middlewares/jwtDecodeMiddleware.ts";
 import { getProfile } from "./controllers/profileController.ts";
 import roomsRouter from "./routes/roomsRoutes.ts";
-const PORT = parseInt(Deno.env.get("PORT") || "3002");
+const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
+
 
 
 const app = new Application();
