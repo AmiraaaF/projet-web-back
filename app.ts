@@ -15,11 +15,26 @@ const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
 
 const app = new Application();
 
-// Configuration CORS
-app.use(oakCors({ 
-  origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
-  credentials: true,
-}));
+try {
+  // Configuration CORS
+  app.use(oakCors({ 
+    origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
+    credentials: true,
+  } ));
+  console.log("CORS configuré avec succès");
+  
+  // Autres configurations...
+} catch (e) {
+  console.error("Erreur lors de la configuration:", e);
+}
+
+
+
+// // Configuration CORS
+// app.use(oakCors({ 
+//   origin: `http://projet-web-front.cluster-ig3.igpolytech.fr`,
+//   credentials: true,
+// }));
 app.use(jwtDecodeMiddleware);
 // Routes
 app.use(adminRoutes.routes());
