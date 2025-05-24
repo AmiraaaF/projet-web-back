@@ -53,12 +53,12 @@ app.use(roomsRouter.allowedMethods());
 app.use(getProfile);
 
 console.log(`Serveur démarré sur http://localhost:${PORT}`);
-// // Route pour la racine
-// app.use((ctx) => {
-//   if (ctx.request.url.pathname === "/") {
-//     ctx.response.body = { message: "API Parkly en ligne" };
-//   }
-// });
+// Route pour la racine
+app.use((ctx) => {
+  if (ctx.request.url.pathname === "/") {
+    ctx.response.body = { message: "API Parkly en ligne" };
+  }
+});
 
 // Juste avant d'écouter sur le port
 console.log(`Serveur prêt à écouter sur le port ${PORT}`);
