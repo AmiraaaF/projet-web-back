@@ -5,39 +5,13 @@ import { db } from "../models/db.ts";  // Correction de l'import
 const roomsRouter = new Router();
 roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
   try {
-    // Ajout de logs pour diagnostiquer le problème
-    console.log("Headers de la requête:", ctx.request.headers);
-    console.log("Type de ctx.request.body:", typeof ctx.request.body);
+    // Méthode recommandée pour Oak v17.1.4
+    const result = ctx.request.body({ type: "json" });
+    const body = await result.value;
     
-    // Tentative avec la méthode standard d'Oak v17
-    let body;
-    try {
-      // Essai avec la méthode standard
-      body = await ctx.request.body({ type: "json" }).value;
-      console.log("Body récupéré avec méthode standard:", body);
-    } catch (bodyError) {
-      console.error("Erreur lors de la récupération du body standard:", bodyError);
-      
-      // Tentative alternative
-      try {
-        body = await ctx.request.body.value;
-        console.log("Body récupéré avec méthode alternative:", body);
-      } catch (altError) {
-        console.error("Erreur lors de la récupération alternative du body:", altError);
-        throw new Error("Impossible de récupérer le body de la requête");
-      }
-    }
-    
-    // Vérification du body
-    if (!body) {
-      console.error("Body est undefined ou null");
-      ctx.response.status = 400;
-      ctx.response.body = { error: "Corps de la requête vide ou invalide" };
-      return;
-    }
+    console.log("Body reçu:", body);
     
     const { name } = body;
-    console.log("Nom extrait du body:", name);
 
     if (!name || typeof name !== "string" || name.trim() === "") {
       ctx.response.status = 400;
