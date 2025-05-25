@@ -29,6 +29,9 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
     // On insère le salon dans la base de données
     db.query("INSERT INTO chat_rooms (name) VALUES (?)", [name.trim()]);
 
+     // Log pour vérifier l'insertion
+    console.log(`Salon "${name}" inséré avec succès.`);
+
     ctx.response.status = 201;
     ctx.response.body = { message: "Salon créé avec succès" };
   } catch (err) {
@@ -37,5 +40,17 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
     ctx.response.body = { error: "Erreur lors de la création du salon", details: err.message };
   }
 });
+
+roomsRouter.get("/rooms", authorizationMiddleware, async (ctx) => {
+  try {
+    const rooms = db.query("SELECT * FROM chat_rooms");
+    ctx.response.body = rooms;
+  } catch (err) {
+    console.error("Erreur récupération salons :", err);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Erreur lors de la récupération des salons", details: err.message };
+  }
+});
+
 
 export default roomsRouter;
