@@ -1,83 +1,77 @@
-import express from "express";
-import db from "./db";
-import { authenticateToken } from "./middlewares";
+import { Router } from "http://deno.land/x/oak@v17.1.4/mod.ts";
+import { authorizationMiddleware } from "../middlewares/authMiddleware.ts";
+import db from "../models/db.ts";
 
-const router = express.Router();
+const router = new Router();
 
-// ✅ Obtenir les messages d’un salon spécifique
-router.get("/api/messages", authenticateToken, async (req, res) => {
-    const roomId = req.query.room_id as string;
+router.get("/api/messages", (ctx) => {
+  try {
+    const { room_id } = ctx.request.url.searchParams;
+    let query = `
+      SELECT m.id, m.content, m.created_at, u.username
+      FROM messages m
+      INNER JOIN users u ON m.sender_id = u.id
+    `;
+    let params: any[] = [];
 
-    if (!roomId) {
-        return res.status(400).json({ error: "Paramètre 'room_id' requis" });
+    if (!room_id) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Paramètre 'room_id' requis." };
+      return;
     }
 
-    try {
-        const result = await db.query(
-            `SELECT messages.id, messages.content, messages.created_at, messages.room_id,
-                    users.username
-             FROM messages
-             JOIN users ON messages.user_id = users.id
-             WHERE messages.room_id = $1
-             ORDER BY messages.created_at ASC`,
-            [roomId]
-        );
 
-        res.json(result.rows);
-    } catch (err) {
-        console.error("Erreur lors de la récupération des messages :", err);
-        res.status(500).json({ error: "Erreur serveur" });
-    }
+    query += " ORDER BY m.created_at ASC";
+
+    const results = db.query(query, params);
+    console.log("[DEBUG] Résultats SQL:", results);
+
+    const messages = results.map(([id, content, created_at, username]) => ({
+      id,
+      content,
+      created_at,
+      username
+    }));
+
+    ctx.response.body = messages;
+  } catch (err) {
+    console.error("Erreur lors de la récupération des messages :", err);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Erreur lors de la récupération des messages." };
+  }
 });
 
-// ✅ Envoyer un message dans un salon
-router.post("/api/messages", authenticateToken, async (req, res) => {
-    const { message, room_id } = req.body;
-    const user_id = req.user.id;
-
-    if (!message || !room_id) {
-        return res.status(400).json({ error: "Le message et le room_id sont requis" });
-    }
-
-    try {
-        const result = await db.query(
-            `INSERT INTO messages (content, user_id, room_id, created_at)
-             VALUES ($1, $2, $3, NOW())
-             RETURNING id, content, created_at`,
-            [message, user_id, room_id]
-        );
-
-        const newMessage = {
-            id: result.rows[0].id,
-            content: result.rows[0].content,
-            created_at: result.rows[0].created_at,
-            user_id,
-            room_id
-        };
-
-        res.status(201).json(newMessage);
-    } catch (err) {
-        console.error("Erreur lors de l'enregistrement du message :", err);
-        res.status(500).json({ error: "Erreur serveur" });
-    }
+router.get("/debug/messages", (ctx) => {
+  const results = db.query("SELECT * FROM messages");
+  ctx.response.body = results;
 });
 
-// ✅ Supprimer un message (réservé à l’admin)
-router.delete("/admin/messages/:id", authenticateToken, async (req, res) => {
-    const messageId = req.params.id;
-    const userRole = req.user.role;
-
-    if (userRole !== "admin") {
-        return res.status(403).json({ error: "Accès interdit. Admin requis." });
+router.post("/api/messages", authorizationMiddleware, async (ctx) => {
+  try {
+    if (!ctx.request.hasBody) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Aucune donnée envoyée." };
+      return;
     }
 
-    try {
-        await db.query("DELETE FROM messages WHERE id = $1", [messageId]);
-        res.json({ message: "Message supprimé avec succès" });
-    } catch (err) {
-        console.error("Erreur suppression message :", err);
-        res.status(500).json({ error: "Erreur serveur" });
+    const body = await ctx.request.body.json();
+    const { sender_id, room_id, content } = body;
+
+    if (!sender_id || !room_id || !content) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Données de message invalides" };
+      return;
     }
+
+    db.query("INSERT INTO messages (sender_id, room_id, content) VALUES (?, ?, ?)", [sender_id, room_id, content]);
+
+    ctx.response.status = 201;
+    ctx.response.body = { message: "Message envoyé avec succès" };
+  } catch (err) {
+    console.error("Erreur envoi message :", err);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Erreur lors de l'envoi du message", details: err.message };
+  }
 });
 
 export default router;
