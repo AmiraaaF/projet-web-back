@@ -14,7 +14,7 @@ roomsRouter.post("/rooms", authorizationMiddleware, async (ctx) => {
     }
 
     // On récupère le JSON du body
-    const body = await ctx.request.body({ type: "json" }).value;
+    const body = await ctx.request.body().value;
 
     // On vérifie si le champ "name" est bien fourni
     const { name } = body;
