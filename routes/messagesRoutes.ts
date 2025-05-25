@@ -12,7 +12,7 @@ router.get("/api/messages", (ctx) => {
       FROM messages m
       INNER JOIN users u ON m.sender_id = u.id
     `;
-    let params = [];
+    let params: any[] = [];
 
     if (room_id) {
       query += " WHERE m.room_id = ?";
