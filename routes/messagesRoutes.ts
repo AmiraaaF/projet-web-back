@@ -7,12 +7,6 @@ const router = new Router();
 router.get("/api/messages", (ctx) => {
   try {
     const { room_id } = ctx.request.url.searchParams;
-    let query = `
-      SELECT m.id, m.content, m.created_at, u.username
-      FROM messages m
-      INNER JOIN users u ON m.sender_id = u.id
-    `;
-    let params: any[] = [];
 
     if (!room_id) {
       ctx.response.status = 400;
@@ -20,8 +14,14 @@ router.get("/api/messages", (ctx) => {
       return;
     }
 
-
-    query += " ORDER BY m.created_at ASC";
+    let query = `
+      SELECT m.id, m.content, m.created_at, u.username
+      FROM messages m
+      INNER JOIN users u ON m.sender_id = u.id
+      WHERE m.room_id = ?
+      ORDER BY m.created_at ASC
+    `;
+    const params = [room_id];
 
     const results = db.query(query, params);
     console.log("[DEBUG] Résultats SQL:", results);
