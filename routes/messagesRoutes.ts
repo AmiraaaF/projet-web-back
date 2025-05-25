@@ -7,21 +7,19 @@ const router = new Router();
 router.get("/api/messages", (ctx) => {
   try {
     const { room_id } = ctx.request.url.searchParams;
-
-    if (!room_id) {
-      ctx.response.status = 400;
-      ctx.response.body = { error: "Paramètre 'room_id' requis." };
-      return;
-    }
-
     let query = `
       SELECT m.id, m.content, m.created_at, u.username
       FROM messages m
       INNER JOIN users u ON m.sender_id = u.id
-      WHERE m.room_id = ?
-      ORDER BY m.created_at ASC
     `;
-    const params = [room_id];
+    let params: any[] = [];
+
+    if (room_id) {
+      query += " WHERE m.room_id = ?";
+      params.push(room_id);
+    }
+
+    query += " ORDER BY m.created_at ASC";
 
     const results = db.query(query, params);
     console.log("[DEBUG] Résultats SQL:", results);
