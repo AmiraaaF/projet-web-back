@@ -1,8 +1,13 @@
 import { DB } from "http://deno.land/x/sqlite/mod.ts";
 
+// Création/connexion à la base de données SQLite locale
 export const db = new DB("database.sqlite");
 
-// Création des tables
+// =========================
+// Création des tables SQL
+// =========================
+
+// Table des utilisateurs
 db.query(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,6 +22,7 @@ db.query(`
   )
 `);
 
+// Table des posts (forum/actualités)
 db.query(`
   CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,6 +35,7 @@ db.query(`
 );
 `);
 
+// Table des parkings
 db.query(`
   CREATE TABLE IF NOT EXISTS parkings (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,6 +51,8 @@ db.query(`
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE );
 `);
+
+// Table des messages du chat
 db.query(`
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,12 +60,12 @@ db.query(`
     room_id INTEGER NOT NULL,
     content TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sender_id) REFERENCES users(id)
+    FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (room_id) REFERENCES chat_rooms(id)
   );
 `);
 
-
+// Table des commentaires (liés à un post ou à un parking)
 db.query(`
   CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,6 +80,8 @@ db.query(`
     CHECK ((post_id IS NOT NULL AND parking_id IS NULL) OR (post_id IS NULL AND parking_id IS NOT NULL))
 );
 `);
+
+// Table des salons de chat
 db.query(`
   CREATE TABLE IF NOT EXISTS chat_rooms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,14 +89,15 @@ db.query(`
   );
 `);
 
-
-// Création du dossier uploads
+// =========================
+// Création du dossier uploads pour stocker les fichiers envoyés
+// =========================
 const uploadDir = "uploads";
 try {
-  await Deno.stat(uploadDir);
+  await Deno.stat(uploadDir); // Vérifie si le dossier existe déjà
 } catch (error) {
   if (error instanceof Deno.errors.NotFound) {
-    await Deno.mkdir(uploadDir);
+    await Deno.mkdir(uploadDir); // Crée le dossier s'il n'existe pas
     console.log("Dossier 'uploads' créé !");
   }
 }
