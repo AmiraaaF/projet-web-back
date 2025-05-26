@@ -29,7 +29,8 @@ export function getParkings(lat: number, lon: number) {
 // Prend en entrée le nom, l'adresse, la latitude et la longitude du parking
 export async function createParking(nom: string, adresse: string, lat: number, lon: number) {
   db.query(
-    "INSERT INTO parkings (nom, adresse, lat, lon) VALUES (?, ?, ?, ?)",
+    "INSERT INTO parkings (name, address, latitude, longitude) VALUES (?, ?, ?, ?)",
     [nom, adresse, lat, lon]
   );
 }
+

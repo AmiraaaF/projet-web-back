@@ -1,6 +1,6 @@
 import { Router } from "http://deno.land/x/oak@v17.1.4/mod.ts";
 import { getParkings, createParking } from "../controllers/parkingController.ts";
-import { authorizationMiddleware } from "../middlewares/authMiddleware.ts";
+import { adminMiddleware } from "../middlewares/adminMiddleware.ts";
 
 const router = new Router();
 
@@ -31,21 +31,43 @@ router.get("/api/parkings", (ctx) => {
 // =========================
 // Permet d'ajouter un nouveau parking (authentification requise)
 // Les données sont envoyées en JSON dans le body de la requête
-router.post("/api/parkings", authorizationMiddleware, async (ctx) => {
+router.post("/api/parkings", adminMiddleware, async (ctx) => {
   // Récupère les données du parking depuis le body JSON
-  const { nom, adresse, lat, lon } = await ctx.request.body({ type: "json" }).value;
+  const { nom, adresse } = await ctx.request.body({ type: "json" }).value;
 
   // Vérifie que toutes les données sont présentes et valides
-  if (!nom || !adresse || isNaN(lat) || isNaN(lon)) {
+  if (!nom || !adresse ) {
     ctx.response.status = 400;
     ctx.response.body = { error: "Données manquantes ou invalides" };
     return;
   }
+  // Géocodage de l'adresse avec Nominatim
+  try {
+    const query = encodeURIComponent(adresse);
+    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`);
+    const geoData = await geoRes.json();
 
-  // Appelle le contrôleur pour créer le parking
-  await createParking(nom, adresse, lat, lon);
-  ctx.response.status = 201;
-  ctx.response.body = { message: "Parking ajouté avec succès" };
+    if (geoData.length === 0) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Adresse introuvable." };
+      return;
+    }
+
+    const lat = parseFloat(geoData[0].lat);
+    const lon = parseFloat(geoData[0].lon);
+
+    await createParking(nom, adresse, lat, lon);
+
+    ctx.response.status = 201;
+    ctx.response.body = { message: "Parking ajouté avec succès" };
+  } catch (e) {
+    console.error("Erreur géocodage :", e);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Erreur lors du géocodage de l'adresse" };
+  }
+  
+
+  
 });
 
 export default router;
