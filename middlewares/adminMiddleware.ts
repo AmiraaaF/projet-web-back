@@ -27,7 +27,7 @@ export const adminMiddleware = async (ctx: Context, next: () => Promise<unknown>
     // Vérifie et décode le token JWT
     const tokenData = await verify(authToken, secretKey);
     // Récupère l'utilisateur correspondant au nom d'utilisateur dans le token
-    const user = getUserByUsername(tokenData.userName);
+    const user = await getUserByUsername(tokenData.userName);
 
     // Si l'utilisateur n'existe pas ou n'est pas admin, on refuse l'accès (403 Forbidden)
     if (!user || user.role !== "admin") {
