@@ -8,24 +8,23 @@ import messagesRoutes from "./routes/messagesRoutes.ts";
 import adminRoutes from "./routes/adminRoutes.ts";
 import { jwtDecodeMiddleware } from "./middlewares/jwtDecodeMiddleware.ts";
 import { getProfile } from "./controllers/profileController.ts";
-import  roomsRouter  from "./routes/roomsRoutes.ts";
+import roomsRouter from "./routes/roomsRoutes.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
 
 //verif
 console.log("Démarrage de l'application Parkly...");
 
-
-
-
 const app = new Application();
 
 // Configuration CORS
 app.use(oakCors({ 
-  origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
+  origin: "https://projet-web-front.cluster-ig3.igpolytech.fr",
   credentials: true,
-} ));
-
-
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Origin", "Accept"],
+  exposedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  maxAge: 86400
+}));
 
 app.use(jwtDecodeMiddleware);
 // Routes
@@ -52,7 +51,7 @@ app.use(roomsRouter.allowedMethods());
 
 app.use(getProfile);
 
-console.log(`Serveur démarré sur http://localhost:${PORT}`);
+console.log(`Serveur démarré sur https://projet-web-back.cluster-ig3.igpolytech.fr:${PORT}`);
 // Route pour la racine
 app.use((ctx) => {
   if (ctx.request.url.pathname === "/") {
