@@ -406,7 +406,7 @@ router.get("/api/osm-parkings", async (ctx) => {
   `;
 
   try {
-    const overpassResponse = await fetch("http://overpass-api.de/api/interpreter", {
+    const overpassResponse = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `data=${encodeURIComponent(query)}`,
@@ -436,7 +436,7 @@ router.get("/api/osm-parkings", async (ctx) => {
 
 
 app.use(oakCors({ 
-  origin: `http://localhost:8060`,
+  origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
   
  }));
@@ -446,5 +446,5 @@ app.use(oakCors({
 app.use(router.routes());
 app.use(router.allowedMethods()),
 
-console.log(`Serveur démarré sur http://localhost:${PORT}`);
+console.log(`Serveur démarré sur https://projet-web-back.cluster-ig3.igpolytech.fr:${PORT}`);
 await app.listen({ port: PORT });

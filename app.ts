@@ -11,7 +11,7 @@ import { getProfile } from "./controllers/profileController.ts";
 import  roomsRouter  from "./routes/roomsRoutes.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
 
-// Au début de app.ts, après les imports
+//verif
 console.log("Démarrage de l'application Parkly...");
 
 
@@ -23,7 +23,9 @@ const app = new Application();
 app.use(oakCors({ 
   origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
-} ));
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 
 
@@ -52,7 +54,7 @@ app.use(roomsRouter.allowedMethods());
 
 app.use(getProfile);
 
-console.log(`Serveur démarré sur http://localhost:${PORT}`);
+console.log(`Serveur démarré sur https://projet-web-back.cluster-ig3.igpolytech.fr:${PORT}`);
 // Route pour la racine
 app.use((ctx) => {
   if (ctx.request.url.pathname === "/") {
