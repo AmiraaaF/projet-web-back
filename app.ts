@@ -7,15 +7,13 @@ import postRoutes from "./routes/postsRoutes.ts";
 import messagesRoutes from "./routes/messagesRoutes.ts";
 import adminRoutes from "./routes/adminRoutes.ts";
 import { jwtDecodeMiddleware } from "./middlewares/jwtDecodeMiddleware.ts";
+import { authorizationMiddleware } from "./middlewares/authMiddleware.ts";
 import { getProfile } from "./controllers/profileController.ts";
-import  roomsRouter  from "./routes/roomsRoutes.ts";
+import roomsRouter from "./routes/roomsRoutes.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "3002");
 
 //verif
 console.log("Démarrage de l'application Parkly...");
-
-
-
 
 const app = new Application();
 
@@ -24,12 +22,11 @@ app.use(oakCors({
   origin: `https://projet-web-front.cluster-ig3.igpolytech.fr`,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"]
 }));
 
-
-
 app.use(jwtDecodeMiddleware);
+
 // Routes
 app.use(adminRoutes.routes());
 app.use(adminRoutes.allowedMethods());
@@ -52,7 +49,8 @@ app.use(messagesRoutes.allowedMethods());
 app.use(roomsRouter.routes());
 app.use(roomsRouter.allowedMethods());
 
-app.use(getProfile);
+// Route /profile avec middleware d'autorisation
+app.use("/profile", authorizationMiddleware, getProfile);
 
 console.log(`Serveur démarré sur https://projet-web-back.cluster-ig3.igpolytech.fr:${PORT}`);
 // Route pour la racine

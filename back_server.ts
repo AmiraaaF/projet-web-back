@@ -310,11 +310,10 @@ const authorizationMiddleware = async (ctx: Context, next: () => Promise<unknown
 // the cookie is tested in the middleware (the cookie is provided by the browser in a header)
 router.get("/profile", authorizationMiddleware, (ctx) => {
   const tokenData = ctx.state.tokenData;
-  // const user = users.find((u) => u.username === tokenData.userName);
   const user = getUser(tokenData.userName);
   if (user) {
     ctx.response.status = 200;
-    ctx.response.body = { username: user.username, id: user.id }; // Ajoutez d'autres informations si nécessaire
+    ctx.response.body = { username: user.username, id: user.id, role: user.role }; // Ajout du rôle
   } else {
     ctx.response.status = 404;
     ctx.response.body = { error: "User not found" };
