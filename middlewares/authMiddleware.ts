@@ -13,7 +13,11 @@ export const authorizationMiddleware = async (ctx: Context, next: () => Promise<
   // Récupère le header "cookie" de la requête HTTP
   const cookie = ctx.request.headers.get("cookie");
   // Extrait le token JWT du cookie "auth_token"
-  const authToken = cookie?.split("; ").find(row => row.startsWith("auth_token="))?.split('=')[1];
+  const authToken = cookie
+    ?.split(";")
+    .map(row => row.trim())
+    .find(row => row.startsWith("auth_token="))
+    ?.split("=")[1];
 
   // Si aucun token n'est trouvé, on refuse l'accès (401 Unauthorized)
   if (!authToken) {
